@@ -24,24 +24,21 @@ comments_content = []
 for comment in comments:
     body = '\n'.join(soup.find_all('p')[0].stripped_strings)
     pattern = re.compile('((?!нейросеть создает|нейросеть не создает).)*')
-    r3 = re.findall(r'нейросеть', comment.div.p.text)
+    r3 = re.findall(r'нейро' or 'ИИ', comment.div.p.text)
     if r3:
         RE = True
     else:
         RE = False
     comments_content.append([comment.div.p.text, RE])
 
-print(comments_content)
-
 
 workbook = Workbook('comments.xlsx')
 worksheet = workbook.add_worksheet()
 
-header = ['Имя пользователя', 'Комментарий']
+header = ['Текст комментария', 'Результат работы регулярки']
 worksheet.write_row(0, 0, header)
 
-for row, comment in enumerate(comments_content):
+for row, comment in enumerate(comments_content, 1):
     worksheet.write_row(row, 0, comment)
 
 workbook.close()
-
